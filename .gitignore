@@ -1,0 +1,12 @@
+build
+
+#subproject subdirectories
+subprojects/googletest
+subprojects/libevent
+subprojects/lmdb
+subprojects/vcblockchain
+subprojects/vccert
+subprojects/vccrypt
+subprojects/vcdb
+subprojects/vcmodel
+subprojects/vpr
