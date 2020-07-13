@@ -1,3 +1,4 @@
+#ignore build directory
 build
 
 #subproject subdirectories
@@ -10,3 +11,7 @@ subprojects/vccrypt
 subprojects/vcdb
 subprojects/vcmodel
 subprojects/vpr
+
+#ignore cscope artifacts
+cscope.*
+tags
