@@ -11,3 +11,5 @@ blockchain.  These features include, but are not limited to:
 * Submitting transactions to a blockchain agent.
 * Querying a blockchain agent and downloading blocks and artifact transactions.
 * Displaying certificates in a human readable format.
+* Verifying signed certificates and blocks.
+* Verifying an entire blockchain from the root block to the latest block.
