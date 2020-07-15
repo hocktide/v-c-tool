@@ -25,12 +25,13 @@ int main(int argc, char* argv[])
     commandline_opts opts;
 
     /* parse command-line options. */
-    if (VCTOOL_STATUS_SUCCESS != commandline_opts_init(&opts, argc, argv))
+    retval = commandline_opts_init(&opts, argc, argv);
+    if (VCTOOL_STATUS_SUCCESS != retval)
     {
         fprintf(stderr, "Error parsing command-line options.\n\n");
         help_print(stderr);
 
-        return 1;
+        goto done;
     }
 
     /* attempt to execute the command. */
@@ -39,5 +40,6 @@ int main(int argc, char* argv[])
     /* clean up opts. */
     dispose((disposable_t*)&opts);
 
+done:
     return retval;
 }
