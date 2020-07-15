@@ -7,6 +7,9 @@
  */
 
 #include <stdio.h>
+#include <vctool/command/help.h>
+#include <vctool/commandline.h>
+#include <vctool/status_codes.h>
 
 /**
  * \brief Main entry point for vctool.
@@ -18,8 +21,23 @@
  */
 int main(int argc, char* argv[])
 {
-    (void)argc;
-    (void)argv;
+    int retval;
+    commandline_opts opts;
 
-    return 0;
+    /* parse command-line options. */
+    if (VCTOOL_STATUS_SUCCESS != commandline_opts_init(&opts, argc, argv))
+    {
+        fprintf(stderr, "Error parsing command-line options.\n\n");
+        help_print(stderr);
+
+        return 1;
+    }
+
+    /* attempt to execute the command. */
+    retval = command_execute(&opts);
+
+    /* clean up opts. */
+    dispose((disposable_t*)&opts);
+
+    return retval;
 }

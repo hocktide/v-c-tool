@@ -10,7 +10,9 @@
 #define VCTOOL_STATUS_CODES_HEADER_GUARD
 
 #include <vctool/components.h>
+#include <vctool/status_codes/commandline.h>
 #include <vctool/status_codes/file.h>
+#include <vctool/status_codes/general.h>
 
 /* make this header C++ friendly. */
 #ifdef __cplusplus

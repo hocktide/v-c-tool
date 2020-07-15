@@ -28,6 +28,11 @@ enum vctool_components
      * \brief file Component.
      */
     VCTOOL_COMPONENT_FILE = 0x01U,
+
+    /**
+     * \brief commandline Component.
+     */
+    VCTOOL_COMPONENT_COMMANDLINE = 0x02U,
 };
 
 /* make this header C++ friendly. */
