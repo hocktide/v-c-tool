@@ -9,6 +9,7 @@
 #ifndef  VCTOOL_COMMANDLINE_HEADER_GUARD
 # define VCTOOL_COMMANDLINE_HEADER_GUARD
 
+#include <vctool/file.h>
 #include <vpr/disposable.h>
 
 /* make this header C++ friendly. */
@@ -28,6 +29,9 @@ struct commandline_opts
     /** \brief this is disposable. */
     disposable_t hdr;
 
+    /** \brief the file abstraction layer for this command. */
+    file* file;
+
     /** \brief command context with config. */
     command* cmd;
 };
@@ -46,13 +50,15 @@ struct command
  * \brief Parse command-line options, initializing a commandline_opts structure.
  *
  * \param opts          The commandline_opts structure to initialize.
+ * \param file          The file abstraction layer to use.
  * \param argc          The argument count.
  * \param argv          The argument vector.
  *
  * \returns a status code indicating success or failure.
  *      - VCTOOL_STATUS_SUCCESS on success.
  */
-int commandline_opts_init(commandline_opts* opts, int argc, char* argv[]);
+int commandline_opts_init(
+    commandline_opts* opts, file* file, int argc, char* argv[]);
 
 /**
  * \brief Execute a command.

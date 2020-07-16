@@ -21,13 +21,15 @@ static void commandline_opts_dispose(void* disp);
  * \brief Parse command-line options, initializing a commandline_opts structure.
  *
  * \param opts          The commandline_opts structure to initialize.
+ * \param file          The file abstraction layer to use.
  * \param argc          The argument count.
  * \param argv          The argument vector.
  *
  * \returns a status code indicating success or failure.
  *      - VCTOOL_STATUS_SUCCESS on success.
  */
-int commandline_opts_init(commandline_opts* opts, int argc, char* argv[])
+int commandline_opts_init(
+    commandline_opts* opts, file* file, int argc, char* argv[])
 {
     int ch, retval;
 
@@ -62,6 +64,7 @@ int commandline_opts_init(commandline_opts* opts, int argc, char* argv[])
 
     /* set opt fields. */
     opts->hdr.dispose = &commandline_opts_dispose;
+    opts->file = file;
     opts->cmd = (command*)root;
 
     /* read through command-line options. */
