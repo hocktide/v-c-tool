@@ -1,7 +1,7 @@
 /**
  * \file include/vctool/command/root.h
  *
- * \brief Root help command structure.
+ * \brief Root command structure.
  *
  * \copyright 2020 Velo Payments.  See License.txt for license terms.
  */
