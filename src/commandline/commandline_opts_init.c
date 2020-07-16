@@ -75,6 +75,12 @@ int commandline_opts_init(commandline_opts* opts, int argc, char* argv[])
                 break;
 
             case 'o':
+                if (NULL != root->output_filename)
+                {
+                    fprintf(stderr, "duplicate option -o %s\n", optarg);
+                    retval = VCTOOL_ERROR_COMMANDLINE_DUPLICATE_OPTION;
+                    goto dispose_opts;
+                }
                 root->output_filename = strdup(optarg);
                 break;
         }
@@ -84,11 +90,23 @@ int commandline_opts_init(commandline_opts* opts, int argc, char* argv[])
     if (root->help_requested)
     {
         retval = process_help_command(opts, argc - optind, argv + optind);
+        if (VCTOOL_STATUS_SUCCESS != retval)
+        {
+            goto dispose_opts;
+        }
         goto done;
     }
 
     /* otherwise, dispatch a root command. */
     retval = dispatch_root_commands(opts, argc - optind, argv + optind);
+    if (VCTOOL_STATUS_SUCCESS != retval)
+    {
+        goto dispose_opts;
+    }
+    goto done;
+
+dispose_opts:
+    dispose((disposable_t*)opts);
     goto done;
 
 cleanup_root_command:
