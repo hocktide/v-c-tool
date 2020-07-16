@@ -9,6 +9,7 @@
 #ifndef  VCTOOL_COMMANDLINE_HEADER_GUARD
 # define VCTOOL_COMMANDLINE_HEADER_GUARD
 
+#include <vccert/builder.h>
 #include <vccrypt/suite.h>
 #include <vctool/file.h>
 #include <vpr/disposable.h>
@@ -36,6 +37,9 @@ struct commandline_opts
     /** \brief crypto suite to use with this command. */
     vccrypt_suite_options_t* suite;
 
+    /** \brief certificate builder options to use with this command. */
+    vccert_builder_options_t* builder_opts;
+
     /** \brief command context with config. */
     command* cmd;
 };
@@ -56,6 +60,7 @@ struct command
  * \param opts          The commandline_opts structure to initialize.
  * \param file          The file abstraction layer to use.
  * \param suite         The crypto suite to use.
+ * \param builder_opts  The certificate builder options to use.
  * \param argc          The argument count.
  * \param argv          The argument vector.
  *
@@ -64,7 +69,7 @@ struct command
  */
 int commandline_opts_init(
     commandline_opts* opts, file* file, vccrypt_suite_options_t* suite,
-    int argc, char* argv[]);
+    vccert_builder_options_t* builder_opts, int argc, char* argv[]);
 
 /**
  * \brief Execute a command.
