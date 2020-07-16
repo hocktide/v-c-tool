@@ -22,6 +22,7 @@ static void commandline_opts_dispose(void* disp);
  *
  * \param opts          The commandline_opts structure to initialize.
  * \param file          The file abstraction layer to use.
+ * \param suite         The crypto suite to use.
  * \param argc          The argument count.
  * \param argv          The argument vector.
  *
@@ -29,7 +30,8 @@ static void commandline_opts_dispose(void* disp);
  *      - VCTOOL_STATUS_SUCCESS on success.
  */
 int commandline_opts_init(
-    commandline_opts* opts, file* file, int argc, char* argv[])
+    commandline_opts* opts, file* file, vccrypt_suite_options_t* suite,
+    int argc, char* argv[])
 {
     int ch, retval;
 
@@ -65,6 +67,7 @@ int commandline_opts_init(
     /* set opt fields. */
     opts->hdr.dispose = &commandline_opts_dispose;
     opts->file = file;
+    opts->suite = suite;
     opts->cmd = (command*)root;
 
     /* read through command-line options. */
