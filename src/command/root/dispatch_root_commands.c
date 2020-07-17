@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <vctool/command/help.h>
+#include <vctool/command/keygen.h>
 #include <vctool/command/root.h>
 #include <vctool/status_codes.h>
 
@@ -39,11 +40,18 @@ int dispatch_root_commands(commandline_opts* opts, int argc, char* argv[])
 
     /* decode the command. */
     char* command = argv[0];
+    --argc;
+    ++argv;
 
     /* is this the help command? */
     if (!strcmp(command, "help"))
     {
-        return process_help_command(opts, argc - 1, argv + 1);
+        return process_help_command(opts, argc, argv);
+    }
+    /* is this the keygen command? */
+    else if (!strcmp(command, "keygen"))
+    {
+        return process_keygen_command(opts, argc, argv);
     }
     /* handle unknown command. */
     else
