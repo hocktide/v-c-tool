@@ -17,6 +17,11 @@ void help_print(FILE* out)
 {
     fprintf(out, "Usage: vctool [options] command [command-options]\n\n");
 
+    fprintf(out, "Options:\n");
+    fprintf(out, "   %-12s Print this help menu.\n", "-h / -?");
+    fprintf(out, "   %-12s Set output filename.\n", "-o file");
+    fprintf(out, "\n");
     fprintf(out, "Commands:\n");
     fprintf(out, "   %-12s Print this help menu.\n", "help");
+    fprintf(out, "   %-12s Generate a keypair certificate file.\n", "keygen");
 }
