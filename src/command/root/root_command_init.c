@@ -33,6 +33,7 @@ int root_command_init(root_command* root)
 
     /* set root command values. */
     root->hdr.hdr.dispose = &dispose_root_command;
+    root->key_derivation_rounds = ROOT_COMMAND_DEFAULT_KEY_DERIVATION_ROUNDS;
 
     /* success. */
     return VCTOOL_STATUS_SUCCESS;

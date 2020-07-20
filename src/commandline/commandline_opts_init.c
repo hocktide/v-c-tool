@@ -34,7 +34,7 @@ int commandline_opts_init(
     commandline_opts* opts, file* file, vccrypt_suite_options_t* suite,
     vccert_builder_options_t* builder_opts, int argc, char* argv[])
 {
-    int ch, retval;
+    int ch, retval, rounds;
 
     /* parameter sanity checks. */
     MODEL_ASSERT(NULL != opts);
@@ -73,7 +73,7 @@ int commandline_opts_init(
     opts->cmd = (command*)root;
 
     /* read through command-line options. */
-    while ((ch = getopt(argc, argv, "?ho:")) != -1)
+    while ((ch = getopt(argc, argv, "?R:ho:")) != -1)
     {
         switch (ch)
         {
@@ -90,6 +90,16 @@ int commandline_opts_init(
                     goto dispose_opts;
                 }
                 root->output_filename = strdup(optarg);
+                break;
+
+            case 'R':
+                rounds = atoi(optarg);
+                if (rounds <= 0)
+                {
+                    fprintf(stderr, "Key derivation rounds must be > 0.\n");
+                    retval = VCTOOL_ERROR_COMMANDLINE_BAD_KEY_ROUNDS;
+                    goto dispose_opts;
+                }
                 break;
         }
     }

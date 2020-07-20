@@ -40,6 +40,12 @@ extern "C" {
 #define VCTOOL_ERROR_COMMANDLINE_DUPLICATE_OPTION \
     VCTOOL_STATUS_ERROR_MACRO(VCTOOL_COMPONENT_COMMANDLINE, 0x0004U)
 
+/**
+ * \brief Invalid number of key rounds.
+ */
+#define VCTOOL_ERROR_COMMANDLINE_BAD_KEY_ROUNDS \
+    VCTOOL_STATUS_ERROR_MACRO(VCTOOL_COMPONENT_COMMANDLINE, 0x0005U)
+
 /* make this header C++ friendly. */
 #ifdef __cplusplus
 }
