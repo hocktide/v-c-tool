@@ -18,11 +18,15 @@
 extern "C" {
 #endif
 
+/* the default number of rounds to use for deriving a key. */
+#define ROOT_COMMAND_DEFAULT_KEY_DERIVATION_ROUNDS      50000
+
 typedef struct root_command
 {
     command hdr;
     bool help_requested;
     char* output_filename;
+    unsigned int key_derivation_rounds;
 } root_command;
 
 /**
