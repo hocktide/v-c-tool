@@ -100,6 +100,7 @@ int commandline_opts_init(
                     retval = VCTOOL_ERROR_COMMANDLINE_BAD_KEY_ROUNDS;
                     goto dispose_opts;
                 }
+                root->key_derivation_rounds = (unsigned int)rounds;
                 break;
         }
     }
