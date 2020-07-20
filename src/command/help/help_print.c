@@ -20,7 +20,7 @@ void help_print(FILE* out)
     fprintf(out, "Options:\n");
     fprintf(out, "   %-12s Print this help menu.\n", "-h / -?");
     fprintf(out, "   %-12s Set output filename.\n", "-o file");
-    fprintf(out, "   %-12s Number of key derivation rounds.\n", "-D num");
+    fprintf(out, "   %-12s Number of key derivation rounds.\n", "-R num");
     fprintf(out, "\n");
     fprintf(out, "Commands:\n");
     fprintf(out, "   %-12s Print this help menu.\n", "help");
