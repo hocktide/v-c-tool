@@ -13,6 +13,7 @@
 #include <vctool/status_codes/commandline.h>
 #include <vctool/status_codes/file.h>
 #include <vctool/status_codes/general.h>
+#include <vctool/status_codes/readpassword.h>
 
 /* make this header C++ friendly. */
 #ifdef __cplusplus
