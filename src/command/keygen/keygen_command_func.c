@@ -13,6 +13,7 @@
 #include <sys/types.h>
 #include <vccert/certificate_types.h>
 #include <vccert/fields.h>
+#include <vccrypt/compare.h>
 #include <vccrypt/suite.h>
 #include <vctool/command/keygen.h>
 #include <vctool/command/root.h>
@@ -43,6 +44,7 @@ int keygen_command_func(commandline_opts* opts)
     int retval, fd;
     const char* output_filename;
     vccrypt_buffer_t password_buffer;
+    vccrypt_buffer_t verify_buffer;
     vccrypt_buffer_t private_cert;
     vccrypt_buffer_t* encrypted_cert = NULL;
     vccrypt_buffer_t* write_cert = NULL;
@@ -76,7 +78,7 @@ int keygen_command_func(commandline_opts* opts)
     }
 
     /* get a passphrase for this file. */
-    printf("Enter passphrase: ");
+    printf("Enter passphrase : ");
     fflush(stdout);
     retval = readpassword(opts, &password_buffer);
     if (VCCRYPT_STATUS_SUCCESS != retval)
@@ -87,6 +89,35 @@ int keygen_command_func(commandline_opts* opts)
     else
     {
         printf("\n");
+    }
+
+    /* read verification passphrase. */
+    if (password_buffer.size > 0)
+    {
+        printf("Verify passphrase: ");
+        fflush(stdout);
+        retval = readpassword(opts, &verify_buffer);
+        if (VCCRYPT_STATUS_SUCCESS != retval)
+        {
+            printf("Failure.\n");
+            goto cleanup_password_buffer;
+        }
+        else
+        {
+            printf("\n");
+        }
+
+        /* verify that the two match. */
+        if ( password_buffer.size != verify_buffer.size
+          || crypto_memcmp(
+                password_buffer.data, verify_buffer.data, password_buffer.size))
+        {
+            fprintf(stderr, "Passphrases do not match.\n");
+            dispose((disposable_t*)&verify_buffer);
+            goto cleanup_password_buffer;
+        }
+
+        dispose((disposable_t*)&verify_buffer);
     }
 
     /* generate a private certificate with a generated key. */
