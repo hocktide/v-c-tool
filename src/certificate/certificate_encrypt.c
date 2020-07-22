@@ -10,6 +10,7 @@
 #include <cbmc/model_assert.h>
 #include <string.h>
 #include <vctool/certificate.h>
+#include <vctool/crypt.h>
 
 /**
  * \brief Encrypt a certificate using the given password.
@@ -36,8 +37,7 @@ int certificate_encrypt(
     vccrypt_stream_context_t cipher;
     vccrypt_mac_context_t mac;
     vccrypt_prng_context_t prng;
-    vccrypt_key_derivation_context_t key_derivation;
-    vccrypt_buffer_t salt, iv, derived_key, mac_buffer;
+    vccrypt_buffer_t salt, iv, mac_buffer;
     uint8_t* benc;
     size_t offset = 0;
 
@@ -70,27 +70,16 @@ int certificate_encrypt(
         goto cleanup_salt;
     }
 
-    /* create a buffer for holding the derived key. */
-    /* TODO - replace with suite method. */
-    retval =
-        vccrypt_buffer_init(
-            &derived_key, opts->suite->alloc_opts,
-            opts->suite->stream_cipher_opts.key_size);
-    if (VCCRYPT_STATUS_SUCCESS != retval)
-    {
-        goto cleanup_iv;
-    }
-
     /* create a buffer for holding the mac. */
     retval =
         vccrypt_suite_buffer_init_for_mac_authentication_code(
             opts->suite, &mac_buffer, false);
     if (VCCRYPT_STATUS_SUCCESS != retval)
     {
-        goto cleanup_derived_key;
+        goto cleanup_iv;
     }
 
-    /* create prng instance for getting salt. */
+    /* create prng instance for getting salt and iv. */
     retval = vccrypt_suite_prng_init(opts->suite, &prng);
     if (VCCRYPT_STATUS_SUCCESS != retval)
     {
@@ -111,34 +100,13 @@ int certificate_encrypt(
         goto cleanup_prng;
     }
 
-    /* create key derivation instance. */
-    retval = vccrypt_suite_key_derivation_init(&key_derivation, opts->suite);
-    if (VCCRYPT_STATUS_SUCCESS != retval)
+    /* create the mac and cipher instances. */
+    retval =
+        crypt_cipher_mac_init_from_password(
+            &cipher, &mac, opts->suite, password, &salt, rounds);
+    if (VCTOOL_STATUS_SUCCESS != retval)
     {
         goto cleanup_prng;
-    }
-
-    /* derive the key. */
-    retval =
-        vccrypt_key_derivation_derive_key(
-            &derived_key, &key_derivation, password, &salt, rounds);
-    if (VCCRYPT_STATUS_SUCCESS != retval)
-    {
-        goto cleanup_key_derivation;
-    }
-
-    /* create the mac instance. */
-    retval = vccrypt_suite_mac_init(opts->suite, &mac, &derived_key);
-    if (VCCRYPT_STATUS_SUCCESS != retval)
-    {
-        goto cleanup_key_derivation;
-    }
-
-    /* create the stream cipher instance. */
-    retval = vccrypt_suite_stream_init(opts->suite, &cipher, &derived_key);
-    if (VCCRYPT_STATUS_SUCCESS != retval)
-    {
-        goto cleanup_mac;
     }
 
     /* compute the size of the encrypted certificate file. */
@@ -154,7 +122,7 @@ int certificate_encrypt(
     *encrypted_cert = (vccrypt_buffer_t*)malloc(sizeof(vccrypt_buffer_t));
     if (NULL == *encrypted_cert)
     {
-        goto cleanup_cipher;
+        goto cleanup_cipher_mac;
     }
 
     /* create the encrypted cert. */
@@ -249,7 +217,7 @@ int certificate_encrypt(
     /* success.  We want to jump past encrypted cert cleanup, as the encrypted
      * cert's ownership transfers to the caller on success. */
     retval = VCTOOL_STATUS_SUCCESS;
-    goto cleanup_cipher;
+    goto cleanup_cipher_mac;
 
 cleanup_encrypted_cert:
     dispose((disposable_t*)*encrypted_cert);
@@ -257,23 +225,15 @@ cleanup_encrypted_cert:
 free_encrypted_cert:
     free(*encrypted_cert);
 
-cleanup_cipher:
+cleanup_cipher_mac:
     dispose((disposable_t*)&cipher);
-
-cleanup_mac:
     dispose((disposable_t*)&mac);
-
-cleanup_key_derivation:
-    dispose((disposable_t*)&key_derivation);
 
 cleanup_prng:
     dispose((disposable_t*)&prng);
 
 cleanup_mac_buffer:
     dispose((disposable_t*)&mac_buffer);
-
-cleanup_derived_key:
-    dispose((disposable_t*)&derived_key);
 
 cleanup_iv:
     dispose((disposable_t*)&iv);
