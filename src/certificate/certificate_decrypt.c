@@ -186,6 +186,7 @@ cleanup_cert:
 
 free_cert:
     free(*cert);
+    *cert = NULL;
 
 cleanup_cipher_mac:
     dispose((disposable_t*)&cipher);
