@@ -38,6 +38,11 @@ enum vctool_components
      * \brief readpassword Component.
      */
     VCTOOL_COMPONENT_READPASSWORD = 0x03U,
+
+    /**
+     * \brief certificate Component.
+     */
+    VCTOOL_COMPONENT_CERTIFICATE = 0x04U,
 };
 
 /* make this header C++ friendly. */
