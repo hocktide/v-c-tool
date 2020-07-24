@@ -11,6 +11,7 @@
 #include <string.h>
 #include <vctool/command/help.h>
 #include <vctool/command/keygen.h>
+#include <vctool/command/pubkey.h>
 #include <vctool/command/root.h>
 #include <vctool/status_codes.h>
 
@@ -52,6 +53,11 @@ int dispatch_root_commands(commandline_opts* opts, int argc, char* argv[])
     else if (!strcmp(command, "keygen"))
     {
         return process_keygen_command(opts, argc, argv);
+    }
+    /* is this the pubkey command? */
+    else if (!strcmp(command, "pubkey"))
+    {
+        return process_pubkey_command(opts, argc, argv);
     }
     /* handle unknown command. */
     else

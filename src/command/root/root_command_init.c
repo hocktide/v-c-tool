@@ -53,4 +53,10 @@ static void dispose_root_command(void* disp)
     {
         free(root->output_filename);
     }
+
+    /* if the key filename is set, then free it. */
+    if (NULL != root->key_filename)
+    {
+        free(root->key_filename);
+    }
 }

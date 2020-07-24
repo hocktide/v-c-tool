@@ -73,13 +73,23 @@ int commandline_opts_init(
     opts->cmd = (command*)root;
 
     /* read through command-line options. */
-    while ((ch = getopt(argc, argv, "?R:ho:")) != -1)
+    while ((ch = getopt(argc, argv, "?R:hk:o:")) != -1)
     {
         switch (ch)
         {
             case '?':
             case 'h':
                 root->help_requested = true;
+                break;
+
+            case 'k':
+                if (NULL != root->key_filename)
+                {
+                    fprintf(stderr, "duplicate option -k %s\n", optarg);
+                    retval = VCTOOL_ERROR_COMMANDLINE_DUPLICATE_OPTION;
+                    goto dispose_opts;
+                }
+                root->key_filename = strdup(optarg);
                 break;
 
             case 'o':

@@ -21,8 +21,11 @@ void help_print(FILE* out)
     fprintf(out, "   %-12s Print this help menu.\n", "-h / -?");
     fprintf(out, "   %-12s Set output filename.\n", "-o file");
     fprintf(out, "   %-12s Number of key derivation rounds.\n", "-R num");
+    fprintf(out, "   %-12s The private keypair file.\n", "-k file");
     fprintf(out, "\n");
     fprintf(out, "Commands:\n");
     fprintf(out, "   %-12s Print this help menu.\n", "help");
     fprintf(out, "   %-12s Generate a keypair certificate file.\n", "keygen");
+    fprintf(out, "   %-12s Create a pubkey certificate from a keypair.\n",
+           "pubkey");
 }
