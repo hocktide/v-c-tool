@@ -26,6 +26,7 @@ typedef struct root_command
     command hdr;
     bool help_requested;
     char* output_filename;
+    char* key_filename;
     unsigned int key_derivation_rounds;
 } root_command;
 
